@@ -1,0 +1,27 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - "v*.*.*" # Triggers when a tag like v1.0.0 is pushed
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Publish to pub.dev
+        env:
+          PUB_CREDENTIALS: ${{ secrets.DART_SITE_CREDENTIALS }}
+        run: dart pub publish --force
