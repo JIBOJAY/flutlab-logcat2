@@ -1,9 +1,7 @@
 name: Publish to pub.dev
 
 on:
-  push:
-    tags:
-      - "v*.*.*" # Triggers when a tag like v1.0.0 is pushed
+  workflow_dispatch: # Allows manual triggering
 
 jobs:
   publish:
