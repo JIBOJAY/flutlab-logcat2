@@ -11,15 +11,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Dart
-        uses: dart-lang/setup-dart@v1
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2 # Installs Flutter SDK
         with:
-          sdk: stable
+          flutter-version: stable
 
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
 
       - name: Publish to pub.dev
         env:
           PUB_CREDENTIALS: ${{ secrets.DART_SITE_CREDENTIALS }}
-        run: dart pub publish --force
+        run: flutter pub publish --force
