@@ -7,19 +7,33 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        architecture: [x64, arm64] # Define architectures to test on
+
     steps:
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Set up Flutter
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2 # Installs Flutter SDK
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: stable
+          architecture: ${{ matrix.architecture }}
 
+      # Step 3: Verify Flutter setup
+      - name: Verify Flutter
+        run: flutter doctor -v
+
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
+      # Step 5: Publish package to pub.dev
       - name: Publish to pub.dev
+        if: ${{ matrix.architecture == 'x64' }} # Ensure publishing happens only once
         env:
           PUB_CREDENTIALS: ${{ secrets.DART_SITE_CREDENTIALS }}
         run: flutter pub publish --force
