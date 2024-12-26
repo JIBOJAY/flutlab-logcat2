@@ -7,10 +7,6 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        architecture: [x64, arm64] # Define architectures to test on
-
     steps:
       # Step 1: Checkout repository
       - name: Checkout repository
@@ -21,7 +17,6 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: stable
-          architecture: ${{ matrix.architecture }}
 
       # Step 3: Verify Flutter setup
       - name: Verify Flutter
@@ -31,9 +26,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # Step 5: Publish package to pub.dev
+      # Step 5: Build for armeabi-v7a
+      - name: Build APK for armeabi-v7a
+        run: flutter build apk --target-platform android-arm --release
+
+      # Step 6: Publish to pub.dev
       - name: Publish to pub.dev
-        if: ${{ matrix.architecture == 'x64' }} # Ensure publishing happens only once
         env:
           PUB_CREDENTIALS: ${{ secrets.DART_SITE_CREDENTIALS }}
         run: flutter pub publish --force
