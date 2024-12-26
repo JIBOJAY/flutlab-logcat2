@@ -8,29 +8,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: stable
+          flutter-version: '2.10.5' # Specify the desired Flutter version
 
-      # Step 3: Verify Flutter setup
       - name: Verify Flutter
         run: flutter doctor -v
 
-      # Step 4: Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
-      # Step 5: Build for armeabi-v7a
       - name: Build APK for armeabi-v7a
         run: flutter build apk --target-platform android-arm --release
 
-      # Step 6: Publish to pub.dev
       - name: Publish to pub.dev
         env:
           PUB_CREDENTIALS: ${{ secrets.DART_SITE_CREDENTIALS }}
